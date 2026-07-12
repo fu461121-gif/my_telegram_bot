@@ -1,26 +1,13 @@
-name: Python Package using Conda
+- name: Setup Miniconda
+  uses: conda-incubator/setup-miniconda@v3
+  with:
+    python-version: '3.10'
+    activate-environment: myenv
+    # environment-file: environment.yml   <-- احذف هذا السطر أو علّق عليه
 
-on: [push]
-
-jobs:
-  build-linux:
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 5
-
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          python-version: '3.10'
-          activate-environment: myenv  # اسم البيئة الافتراضي
-          environment-file: environment.yml  # إذا كان لديك ملف، وإلا احذف هذا السطر
-          
-      - name: Install dependencies
-        run: |
-          conda info
-          # ضع هنا أوامر التثبيت، مثلاً:
-          # conda install numpy pytest -y
-          # أو pip install -r requirements.txt
+- name: Install dependencies
+  run: |
+    # مثال: ثبّت المكتبات التي تحتاجها (عدّل حسب مشروعك)
+    pip install python-telegram-bot requests pytest
+    # أو استخدم conda إذا أردت:
+    # conda install numpy pandas -y

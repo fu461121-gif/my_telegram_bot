@@ -3,11 +3,11 @@ import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
 
-# قراءة التوكن من متغيرات البيئة (آمن)
-BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+# 🔑 التوكن الخاص بك (موجود مباشرة في الكود)
+BOT_TOKEN = "8756123739:AAHPbxnTj6sq-dSQaeW-RIy4WJV0_wCt6Uc"
 
 if not BOT_TOKEN:
-    raise ValueError("❌ التوكن غير موجود! تأكد من تعيين TELEGRAM_BOT_TOKEN في متغيرات البيئة.")
+    raise ValueError("❌ التوكن غير موجود!")
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
                     level=logging.INFO)
@@ -21,7 +21,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ],
         [
             InlineKeyboardButton("ℹ️ عن البوت", callback_data="about"),
-            InlineKeyboardButton("📱 المطور", url="https://t.me/fu461121")  # غير الرابط لاسمك
+            InlineKeyboardButton("📱 المطور", url="https://t.me/fu461121")
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -46,14 +46,14 @@ async def about(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "🤖 **عن البوت:**\n\n"
         "تم تطوير هذا البوت باستخدام Python ومكتبة python-telegram-bot.\n"
-        "يعمل على منصة Kuberns ويستخدم متغيرات البيئة لحماية التوكن.\n\n"
+        "يعمل على منصة Kuberns.\n\n"
         "🚀 تم إنشاؤه خصيصاً لتجربة الأزرار التفاعلية."
     )
 
-# 4️⃣ دالة معالجة الضغط على الأزرار (CallbackQuery)
+# 4️⃣ دالة معالجة الضغط على الأزرار
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
-    await query.answer()  # لإزالة الدائرة الزرقاء التي تظهر بعد الضغط
+    await query.answer()
 
     if query.data == "menu":
         await query.edit_message_text("📋 هذه هي القائمة الرئيسية.\nيمكنك اختيار ما تريد.")
@@ -73,15 +73,10 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def main():
     app = Application.builder().token(BOT_TOKEN).build()
 
-    # إضافة الأوامر
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("about", about))
-
-    # إضافة معالج الضغط على الأزرار
     app.add_handler(CallbackQueryHandler(button_handler))
-
-    # إضافة معالج النصوص (الصدى)
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
 
     print("✅ البوت شغال الآن مع الأزرار الجديدة...")
